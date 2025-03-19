@@ -7,7 +7,7 @@ from collections import Counter
 from asciichartpy import plot
 from termcolor import colored
 
-# Log file paths
+# Log file paths (Lets make sure it the script are in separate folder and the logs are in another one)
 log_files = {
     "access": "../logs/simulated_access.log",
     "auth": "../logs/simulated_auth.log",
@@ -46,16 +46,16 @@ def display_report():
     # Extract top attacking IPs
     attacking_ips = attack_logs["ip"].value_counts().head(5).to_dict() if not attack_logs.empty else {}
 
-    # Extract attack statuses (200 or 403)
+    # Extract attack statuses (200 or 403) in another version we can change to see all possible status codes. 
     attack_statuses = attack_logs["status"].value_counts().to_dict()
 
     # Attack types and frequency analysis
     attack_frequency = {}
     for attack in attack_logs["request"]:
-        attack_type = attack.split(" ")[1]  # Extract the attack type from the request (e.g., "SQL_INJECTION")
+        attack_type = attack.split(" ")[1]  # Extract the attack type from the request (e.g., "XXE")
         attack_frequency[attack_type] = attack_frequency.get(attack_type, 0) + 1
 
-    # Recommendations
+    # Recommendation section, which is static for now.
     recommendations = [
         "Implement IP rate limiting to prevent brute-force attacks.",
         "Use a Web Application Firewall (WAF) to block SQL Injection and XSS attacks.",
@@ -64,7 +64,7 @@ def display_report():
         "Perform regular penetration testing and security audits."
     ]
     
-    # Display Report in Terminal with Colors
+    # Display Report in Terminal with several colors 
     print(colored("\n# Security Monitoring Report\n", "cyan", attrs=["bold"]))
     print(colored("## Summary", "yellow", attrs=["bold"]))
     print(f"- Total Requests: {colored(total_requests, 'green')}")
